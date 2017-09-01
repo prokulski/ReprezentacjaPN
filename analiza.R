@@ -6,7 +6,6 @@ library(stringr)
 library(lubridate)
 
 
-
 # theme
 theme_set(theme_minimal() +
             theme(plot.title = element_text(family = NULL, face = "bold", size = 18, color = "black"),
@@ -21,6 +20,9 @@ mecze_df <- readRDS("mecze_df.RDS")
 
 # bez meczy, które dopiero będą
 mecze_df <- mecze_df %>% filter(!is.na(gospodarz_bramki))
+
+
+
 
 # bilans bramek miesiąc po miesiącu
 mecze_df %>%
@@ -37,6 +39,8 @@ mecze_df %>%
        x = "Data", y = "Bramki (strzelone, stracone)",
        subtitle = "Liczba bramek strzelonych (zielone) i straconych (czerowne) w danym miesiącu.\nLinia niebieska to trend różnicy bramek",
        caption = "(c) Łukasz Prokulski, fb.com/DaneAnalizy")
+
+
 
 
 # wyniki z poszczególnymi przeciwnikami
@@ -67,7 +71,7 @@ mecze_df %>%
 
 
 
-# wyniki z poszczególnymi przeciwnikami
+# wyniki z konkretnym przeciwnikiem
 mecze_df %>%
   filter(przeciwnik == "Dania") %>%
   mutate(roznica = bramki_strzelone - bramki_stracone) %>%
@@ -82,6 +86,8 @@ mecze_df %>%
        caption = "(c) Łukasz Prokulski, fb.com/DaneAnalizy")
 
 
+
+
 # średnie wyniki z przeciwnikami
 mecze_df %>%
   group_by(przeciwnik) %>%
@@ -93,6 +99,8 @@ mecze_df %>%
   geom_bar(aes(przeciwnik, -strata), fill="red", stat="identity") +
   geom_bar(aes(przeciwnik, zysk), fill="green", stat="identity") +
   coord_flip()
+
+
 
 # średnie wyniki rok po roku
 mecze_df %>%
