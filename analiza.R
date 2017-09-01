@@ -123,3 +123,29 @@ mecze_df %>%
   scale_x_continuous(breaks = 0:10) +
   scale_y_continuous(breaks = 0:10)
 
+
+
+# czy strzelamy czy tracimy więcej bramek, rok po roku?
+mecze_df %>%
+  filter(rodzaj != "mecz towarzyski") %>%
+  group_by(rok) %>%
+  summarise(stracone = mean(bramki_stracone),
+            strzelone = mean(bramki_strzelone)) %>%
+  ungroup() %>%
+  ggplot() +
+  geom_smooth(aes(rok, stracone), color = "red", se = FALSE) +
+  geom_point(aes(rok, stracone), color = "red") +
+  geom_smooth(aes(rok, strzelone), color = "green", se = FALSE) +
+  geom_point(aes(rok, strzelone), color = "green")
+
+
+# czy dni, w które rozgrywane są mecze są zawsze te same?
+mecze_df %>%
+  filter(rodzaj != "mecz towarzyski") %>%
+  filter(str_sub(rodzaj, 1, 5) == "El. M") %>%
+  mutate(wday = factor(wday(data_meczu),
+                       levels=c(2,3,4,5,6,7,1),
+                       labels=c("pn","wt","śr","cz","pt","sb","nd"))) %>%
+  count(rok, wday) %>%
+  ggplot() +
+  geom_tile(aes(rok, wday, fill=n))
